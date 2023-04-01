@@ -25,7 +25,10 @@ public class GridBuilder : MonoBehaviour
                 Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
                 Vector2 click_position = WorldGrid.GetXY(hit.point);
                 Vector3 world_position = WorldGrid.GetWorldPosition(click_position);
-                Instantiate(cube_prefab, world_position, Quaternion.identity);
+                GameObject building = Instantiate(cube_prefab, Vector3.zero, Quaternion.identity);
+                if (!WorldGrid.SetBuilding(world_position, building)) {
+                    Destroy(building);
+                }
             }
         }
     }

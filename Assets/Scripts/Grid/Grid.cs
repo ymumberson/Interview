@@ -24,6 +24,9 @@ public class Grid
         {
             for (int i=0; i<width; ++i)
             {
+                GameObject go = new GameObject();
+                go.transform.position = this.GetWorldPosition(j,i);
+                grid[j, i] = go.AddComponent<GridObject>();
                 Debug.DrawLine(GetWorldPosition(j,i), GetWorldPosition(j+1,i), Color.white, 100f);
                 Debug.DrawLine(GetWorldPosition(j, i), GetWorldPosition(j, i+1), Color.white, 100f);
             }
@@ -54,22 +57,43 @@ public class Grid
             Mathf.FloorToInt(world_position.x / cell_size),
             Mathf.FloorToInt(world_position.z / cell_size));
     }
-    public void SetValue(int y, int x, GridObject value)
+    public bool SetValue(int y, int x, GridObject value)
     {
         if (InBounds(y, x))
         {
             grid[y, x] = value;
+            return true;
         }
         else
         {
             Debug.LogError("Tried to set grid position [" + y + "," + x + "] which is out of bounds. Height: " + height + ", Width: " + width);
+            return false;
+        }
+    }
+    public bool SetValue(Vector3 world_position, GridObject value)
+    {
+        Vector2Int pos = GetXY(world_position);
+        return SetValue(pos.y, pos.x, value);
+    }
+
+    public bool SetBuilding(int y, int x, GameObject building)
+    {
+        if (InBounds(y, x))
+        {
+            grid[y, x].SetBuilding(building);
+            return true;
+        }
+        else
+        {
+            Debug.LogError("Tried to set grid position [" + y + "," + x + "] which is out of bounds. Height: " + height + ", Width: " + width);
+            return false;
         }
     }
 
-    public void SetValue(Vector3 world_position, GridObject value)
+    public bool SetBuilding(Vector3 world_position, GameObject building)
     {
         Vector2Int pos = GetXY(world_position);
-        SetValue(pos.y, pos.x, value);
+        return SetBuilding(pos.y, pos.x, building);
     }
     public bool InBounds(int y, int x)
     {
