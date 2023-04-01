@@ -23,7 +23,7 @@ public class GridBuilder : MonoBehaviour
         height = 10;
         width = 10;
         cell_size = 10f;
-        WorldGrid = new Grid(height, width, cell_size);
+        WorldGrid = new Grid(new Vector3(0, 0, 0), height, width, cell_size);
         selected_prefab = prefab_list[0];
 
         ghost = Instantiate(selected_prefab, Vector3.zero, Quaternion.Euler(0, Building.GetDirectionAngle(rotation), 0)).GetComponent<Building>();

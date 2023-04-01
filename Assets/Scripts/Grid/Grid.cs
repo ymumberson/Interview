@@ -12,12 +12,14 @@ public class Grid
     private int width = 10;
     private float cell_size = 10f;
     private GridObject[,] grid;
-    public Grid(int width, int height, float cell_size)
+    private Vector3 origin;
+    public Grid(Vector3 origin, int width, int height, float cell_size)
     {
         this.width = width;
         this.height = height;
         this.cell_size = cell_size;
         this.grid = new GridObject[height,width];
+        this.origin = origin;
         for (int j=0; j<height; ++j)
         {
             for (int i=0; i<width; ++i)
@@ -36,24 +38,24 @@ public class Grid
     public Vector3 GetWorldPosition(int x, int y)
     {
         //return new Vector3(y, x) * cell_size;
-        return new Vector3(x, 0, y) * cell_size;
+        return new Vector3(x, 0, y) * cell_size + origin;
     }
 
     public Vector3 GetWorldPosition(Vector2 grid_position)
     {
-        return new Vector3(grid_position.x, 0, grid_position.y) * cell_size;
+        return new Vector3(grid_position.x, 0, grid_position.y) * cell_size + origin;
     }
     public void GetXY(Vector3 world_position, out int x, out int y)
     {
-        x = Mathf.FloorToInt(world_position.x/ cell_size);
-        y = Mathf.FloorToInt(world_position.z / cell_size);
+        x = Mathf.FloorToInt((world_position - origin).x/ cell_size);
+        y = Mathf.FloorToInt((world_position - origin).z / cell_size);
     }
 
     public Vector2Int GetXY(Vector3 world_position)
     {
         return new Vector2Int(
-            Mathf.FloorToInt(world_position.x / cell_size),
-            Mathf.FloorToInt(world_position.z / cell_size));
+            Mathf.FloorToInt((world_position - origin).x / cell_size),
+            Mathf.FloorToInt((world_position - origin).z / cell_size));
     }
     public bool SetValue(int x, int y, GridObject value)
     {
