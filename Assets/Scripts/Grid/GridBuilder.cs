@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GridBuilder : MonoBehaviour
 {
@@ -44,11 +45,11 @@ public class GridBuilder : MonoBehaviour
             world_position = WorldGrid.GetWorldPosition(click_position);
         }
 
-            if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             //RaycastHit hit;
             //Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
-            if (hit.rigidbody != null)
+            if (hit.rigidbody != null && !EventSystem.current.IsPointerOverGameObject())
             {
                 //Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
                 //Vector2Int click_position = WorldGrid.GetXY(hit.point);
@@ -76,7 +77,7 @@ public class GridBuilder : MonoBehaviour
         {
             //RaycastHit hit;
             //Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
-            if (hit.rigidbody != null)
+            if (hit.rigidbody != null && !EventSystem.current.IsPointerOverGameObject())
             {
                 //Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
                 //Vector2Int click_position = WorldGrid.GetXY(hit.point);
