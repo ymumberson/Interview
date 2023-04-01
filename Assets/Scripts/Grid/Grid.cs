@@ -45,7 +45,7 @@ public class Grid
     }
     public void GetXY(Vector3 world_position, out int x, out int y)
     {
-        x = Mathf.FloorToInt(world_position.x/cell_size);
+        x = Mathf.FloorToInt(world_position.x/ cell_size);
         y = Mathf.FloorToInt(world_position.z / cell_size);
     }
 
@@ -114,6 +114,18 @@ public class Grid
     {
         Vector2Int pos = GetXY(world_position);
         return SetBuilding(pos.x, pos.y, building);
+    }
+
+    public bool RemoveBuilding(int x, int y)
+    {
+        if (!InBounds(x, y)) return false;
+        grid[x,y].RemoveBuilding();
+        return true;
+    }
+    public Building GetBuilding(int x, int y)
+    {
+        if (InBounds(x, y) && grid[x, y].ContainsBuilding()) return grid[x, y].GetBuilding();
+        return null;
     }
     public bool InBounds(int x, int y)
     {

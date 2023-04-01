@@ -11,7 +11,7 @@ public class Building : MonoBehaviour
 
     public static Direction NextDirection(Direction d)
     {
-        if (d == Direction.RIGHT) return Direction.UP;
+        if (d == Direction.LEFT) return Direction.UP;
         return d + 1;
     }
     public static int GetDirectionAngle(Direction d)
@@ -44,9 +44,9 @@ public class Building : MonoBehaviour
     public enum Direction
     {
         UP = 0,
-        DOWN = 1,
-        LEFT = 2,
-        RIGHT = 3
+        RIGHT = 1,
+        DOWN = 2,
+        LEFT = 3
     }
 
     private void Awake()
@@ -184,8 +184,6 @@ public class Building : MonoBehaviour
     public void SetDirection(Direction new_direction)
     {
         this.direction = new_direction;
-        //Quaternion q = Quaternion.Euler(0, Building.GetDirectionAngle(direction), 0);
-        //this.transform.rotation = q;
     }
 
     public Vector3 GetDirectionOffset()
@@ -203,5 +201,11 @@ public class Building : MonoBehaviour
     public void SetPosition(Vector3 world_position)
     {
         this.transform.position = world_position + this.GetDirectionOffset();
+    }
+
+    public List<Vector2Int> GetOccupiedTiles(Grid world_grid)
+    {
+        Vector2Int grid_position = world_grid.GetXY(this.transform.position - this.GetDirectionOffset());
+        return this.GetAllGridPositions(grid_position);
     }
 }

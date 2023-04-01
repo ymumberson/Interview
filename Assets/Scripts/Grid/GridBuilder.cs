@@ -55,6 +55,34 @@ public class GridBuilder : MonoBehaviour
             }
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit hit;
+            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
+            if (hit.rigidbody != null)
+            {
+                //Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
+                Vector2Int click_position = WorldGrid.GetXY(hit.point);
+                Vector3 world_position = WorldGrid.GetWorldPosition(click_position);
+
+                Building b = WorldGrid.GetBuilding(click_position.x, click_position.y);
+
+                if (b != null)
+                {
+                    string s = "Building occupies";
+                    foreach (Vector2Int v in b.GetOccupiedTiles(WorldGrid))
+                    {
+                        WorldGrid.RemoveBuilding(v.x, v.y);
+                    }
+                }
+            }
+        }
+
+        if (Input.GetKeyDown("r"))
+        {
+            this.rotation = Building.NextDirection(this.rotation);
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1)) selected_prefab = prefab_list[0];
         if (Input.GetKeyDown(KeyCode.Alpha2)) selected_prefab = prefab_list[1];
         if (Input.GetKeyDown(KeyCode.Alpha3)) selected_prefab = prefab_list[2];
