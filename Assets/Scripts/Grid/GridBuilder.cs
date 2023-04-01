@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridBuilder : MonoBehaviour
 {
     [SerializeField] GameObject cube_prefab;
+    [SerializeField] GameObject sphere_prefab;
     [SerializeField] LayerMask detect_layer;
     public Grid WorldGrid { get; private set; }
     private void Awake()
@@ -23,14 +24,23 @@ public class GridBuilder : MonoBehaviour
             Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
             if (hit.rigidbody != null)
             {
-                Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
+                //Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
                 Vector2 click_position = WorldGrid.GetXY(hit.point);
                 Vector3 world_position = WorldGrid.GetWorldPosition(click_position);
 
                 /* Check if we can build at a certain place */
                 if (WorldGrid.CanBuild(world_position))
                 {
-                    GameObject building = Instantiate(cube_prefab, Vector3.zero, Quaternion.identity);
+                    //GameObject building = Instantiate(cube_prefab, Vector3.zero, Quaternion.identity);
+                    GameObject building;
+                    if (Random.value < 0.5)
+                    {
+                        building = Instantiate(cube_prefab, Vector3.zero, Quaternion.identity);
+                    }
+                    else
+                    {
+                        building = Instantiate(sphere_prefab, Vector3.zero, Quaternion.identity);
+                    }
                     WorldGrid.SetBuilding(world_position, building);
                 }
                 else
