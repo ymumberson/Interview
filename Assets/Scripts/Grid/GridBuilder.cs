@@ -74,7 +74,6 @@ public class GridBuilder : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            print(hit.point + " -> " + click_position + " -> " + world_position);
             //RaycastHit hit;
             //Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
             if (hit.rigidbody != null)
@@ -85,6 +84,7 @@ public class GridBuilder : MonoBehaviour
 
                 Building b = WorldGrid.GetBuilding(click_position.x, click_position.y);
                 SetGhostToSelectedBuilding(b);
+                Debug.Log("Selected building: " + b);
                 if (b != null)
                 {
                     foreach (Vector2Int v in b.GetOccupiedTiles(WorldGrid))
@@ -153,5 +153,10 @@ public class GridBuilder : MonoBehaviour
                 break;
         }
         this.rotation = b.GetDirection();
+    }
+
+    public void SetGhostBuilding(int index)
+    {
+        if (index >= 0 && index < prefab_list.Count) selected_prefab = prefab_list[index];
     }
 }
