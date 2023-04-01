@@ -9,6 +9,7 @@ public class GridBuilder : MonoBehaviour
     //[SerializeField] GameObject big_cube_prefab;
     [SerializeField] List<GameObject> prefab_list;
     [SerializeField] LayerMask detect_layer;
+    [SerializeField] Material ghost_material;
     public Building.Direction rotation;
     private GameObject selected_prefab;
     private Building ghost;
@@ -117,9 +118,7 @@ public class GridBuilder : MonoBehaviour
         Renderer r = ghost.gameObject.GetComponentInChildren<Renderer>();
         if (r != null)
         {
-            Color c = r.material.color;
-            c.a = 0.5f;
-            r.material.color = c;
+            r.material = ghost_material;
         }
     }
 }

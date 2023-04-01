@@ -202,7 +202,6 @@ public class Building : MonoBehaviour
     {
         this.transform.position = world_position + this.GetDirectionOffset();
     }
-
     public List<Vector2Int> GetOccupiedTiles(Grid world_grid)
     {
         Vector2Int grid_position = world_grid.GetXY(this.transform.position - this.GetDirectionOffset());
