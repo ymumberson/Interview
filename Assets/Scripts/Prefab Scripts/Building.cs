@@ -67,82 +67,18 @@ public class Building : MonoBehaviour
     {
         this.cell_size = cell_size;
     }
+
     public List<Vector2Int> GetAllGridPositions(Vector2Int starting_point)
     {
-        /* Later, this will have to account for direction so that we can rotate objects */
-        //List<Vector2Int> all_positions = new List<Vector2Int>();
-        //for (int i = 0; i < width; ++i)
-        //{
-        //    for (int j = 0; j < height; ++j)
-        //    {
-        //        all_positions.Add(new Vector2Int(starting_point.x + i, starting_point.y + j));
-        //    }
-        //}
-        //return all_positions;
-
-        //List<Vector2Int> all_positions = new List<Vector2Int>();
-        //switch (this.direction)
-        //{
-        //    case Direction.UP:
-        //        Debug.Log("Up");
-        //        for (int i = 0; i < width; ++i)
-        //        {
-        //            for (int j = 0; j < height; ++j)
-        //            {
-        //                all_positions.Add(new Vector2Int(starting_point.x + i, starting_point.y + j));
-        //            }
-        //        }
-        //        break;
-        //    case Direction.DOWN:
-        //        Debug.Log("Down");
-        //        for (int i = 0; i < width; ++i)
-        //        {
-        //            for (int j = 0; j < height; ++j)
-        //            {
-        //                all_positions.Add(new Vector2Int(starting_point.x - i, starting_point.y - j));
-        //                Debug.Log("New position: " + (starting_point.x - i) + "," + (starting_point.y - j));
-        //            }
-        //        }
-        //        break;
-        //    case Direction.LEFT:
-        //        Debug.Log("Left");
-        //        for (int i = 0; i < width; ++i)
-        //        {
-        //            for (int j = 0; j < height; ++j)
-        //            {
-        //                all_positions.Add(new Vector2Int(starting_point.x + j, starting_point.y + i));
-        //            }
-        //        }
-        //        break;
-        //    case Direction.RIGHT:
-        //        Debug.Log("Right");
-        //        for (int i = 0; i < width; ++i)
-        //        {
-        //            for (int j = 0; j < height; ++j)
-        //            {
-        //                all_positions.Add(new Vector2Int(starting_point.x + j, starting_point.y + i));
-        //            }
-        //        }
-        //        break;
-        //    default: // == UP
-        //        for (int i = 0; i < width; ++i)
-        //        {
-        //            for (int j = 0; j < height; ++j)
-        //            {
-        //                all_positions.Add(new Vector2Int(starting_point.x + i, starting_point.y + j));
-        //            }
-        //        }
-        //        break;
-        //}
-        //return all_positions;
-
-
+        return GetAllGridPositions(starting_point, this.direction);
+    }
+    public List<Vector2Int> GetAllGridPositions(Vector2Int starting_point, Direction dir)
+    {
         List<Vector2Int> all_positions = new List<Vector2Int>();
-        switch (this.direction)
+        switch (dir)
         {
             case Direction.DOWN:
             case Direction.UP:
-                //Debug.Log("Up/Down");
                 for (int i = 0; i < width; ++i)
                 {
                     for (int j = 0; j < height; ++j)
@@ -153,7 +89,6 @@ public class Building : MonoBehaviour
                 break;
             case Direction.LEFT:
             case Direction.RIGHT:
-                //Debug.Log("Right/Left");
                 for (int i = 0; i < height; ++i)
                 {
                     for (int j = 0; j < width; ++j)
@@ -163,7 +98,6 @@ public class Building : MonoBehaviour
                 }
                 break;
             default: // == UP
-                //Debug.Log("Default");
                 for (int i = 0; i < width; ++i)
                 {
                     for (int j = 0; j < height; ++j)
@@ -184,6 +118,7 @@ public class Building : MonoBehaviour
     public void SetDirection(Direction new_direction)
     {
         this.direction = new_direction;
+        this.transform.rotation = Quaternion.Euler(0, Building.GetDirectionAngle(this.direction),0);
     }
 
     public Vector3 GetDirectionOffset()

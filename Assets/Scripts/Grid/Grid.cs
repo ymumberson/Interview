@@ -118,10 +118,25 @@ public class Grid
         return SetBuilding(pos.x, pos.y, building);
     }
 
-    public bool RemoveBuilding(int x, int y)
+    public GameObject RemoveBuilding(int x, int y)
+    {
+        if (!InBounds(x, y)) return null;
+        GameObject building_object = grid[x, y].gameObject;
+        grid[x,y].RemoveBuilding();
+        return building_object;
+    }
+
+    public void RemoveBuildingFromAllTiles(Building b)
+    {
+        foreach (Vector2Int v in b.GetOccupiedTiles(this))
+        {
+            this.RemoveBuilding(v.x, v.y);
+        }
+    }
+    public bool RemoveAndDestroyBuilding(int x, int y)
     {
         if (!InBounds(x, y)) return false;
-        grid[x,y].RemoveBuilding();
+        grid[x, y].RemoveAndDestroyBuilding();
         return true;
     }
     public Building GetBuilding(int x, int y)
@@ -160,24 +175,29 @@ public class Grid
         return true;
     }
 
-    //public bool CanBuild(Vector3 world_position, Building building)
-    //{
-    //    return CanBuild(GetXY(world_position), building);
-    //}
+    public bool CanBuild(Vector2Int v, Building b)
+    {
+        return CanBuild(v.x, v.y, b);
+    }
+    public bool CanBuild(int x, int y, Building b)
+    {
+        return InBounds(x, y) && (!grid[x, y].ContainsBuilding() || grid[x, y].ContainsBuilding(b));
+    }
 
-    //public bool CanBuild(Vector2Int grid_position, Building building)
-    //{
-    //    return CanBuild(grid_position.x, grid_position.y, building);
-    //}
-    //public bool CanBuild(int x, int y, Building building)
-    //{
-    //    for (int i = 0; i < building.GetWidth(); ++i)
-    //    {
-    //        for (int j = 0; j < building.GetHeight(); ++j)
-    //        {
-    //            if (!CanBuild(x+i,y+j)) return false;
-    //        }
-    //    }
-    //    return true;
-    //}
+    public bool CanBuild(Vector3 world_position, Building b)
+    {
+        return CanBuild(GetXY(world_position),b);
+    }
+
+    public bool CanBuild(List<Vector2Int> all_grid_positions, Building b)
+    {
+        foreach (Vector2Int v in all_grid_positions)
+        {
+            if (!CanBuild(v,b))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

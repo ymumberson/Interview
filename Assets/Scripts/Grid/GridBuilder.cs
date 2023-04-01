@@ -11,9 +11,15 @@ public class GridBuilder : MonoBehaviour
     [SerializeField] List<GameObject> prefab_list;
     [SerializeField] LayerMask detect_layer;
     [SerializeField] Material ghost_material;
+    [SerializeField] Material selected_material;
+    [SerializeField] Material pickedup_material;
     public Building.Direction rotation;
     private GameObject selected_prefab;
     private Building ghost;
+
+    private GameObject selected_object_in_scene;
+    private Material selected_object_in_scene_material;
+    private bool picked_up_selected_object_in_scene;
 
     private int height;
     private int width;
@@ -26,6 +32,9 @@ public class GridBuilder : MonoBehaviour
         cell_size = 10f;
         WorldGrid = new Grid(new Vector3(0, 0, 0), height, width, cell_size);
         selected_prefab = prefab_list[0];
+        selected_object_in_scene = null;
+        selected_object_in_scene_material = null;
+        picked_up_selected_object_in_scene = false;
 
         ghost = Instantiate(selected_prefab, Vector3.zero, Quaternion.Euler(0, Building.GetDirectionAngle(rotation), 0)).GetComponent<Building>();
         ghost.SetDirection(rotation);
@@ -55,21 +64,30 @@ public class GridBuilder : MonoBehaviour
                 //Vector2Int click_position = WorldGrid.GetXY(hit.point);
                 //Vector3 world_position = WorldGrid.GetWorldPosition(click_position);
 
-                GameObject building = Instantiate(selected_prefab, Vector3.zero, Quaternion.Euler(0, Building.GetDirectionAngle(rotation), 0));
-                Building building_script = building.GetComponent<Building>();
-                building_script.SetDirection(rotation);
-                building_script.SetCellSize(cell_size);
-
-                List<Vector2Int> all_grid_positions = building_script.GetAllGridPositions(click_position);
-                if (WorldGrid.CanBuild(all_grid_positions))
+                if (picked_up_selected_object_in_scene)
                 {
-                    WorldGrid.SetBuilding(world_position, building);
+                    RepositionSelectedObjectInScene(click_position);
                 }
                 else
                 {
-                    Debug.Log("There is alread a building here!");
-                    Destroy(building.gameObject);
+                    GameObject building = Instantiate(selected_prefab, Vector3.zero, Quaternion.Euler(0, Building.GetDirectionAngle(rotation), 0));
+                    Building building_script = building.GetComponent<Building>();
+                    building_script.SetDirection(rotation);
+                    building_script.SetCellSize(cell_size);
+
+                    List<Vector2Int> all_grid_positions = building_script.GetAllGridPositions(click_position);
+                    if (WorldGrid.CanBuild(all_grid_positions))
+                    {
+                        WorldGrid.SetBuilding(world_position, building);
+                    }
+                    else
+                    {
+                        Debug.Log("There is alread a building here!");
+                        Destroy(building.gameObject);
+                    }
                 }
+
+                
             }
         }
 
@@ -84,17 +102,11 @@ public class GridBuilder : MonoBehaviour
                 //Vector3 world_position = WorldGrid.GetWorldPosition(click_position);
 
                 Building b = WorldGrid.GetBuilding(click_position.x, click_position.y);
-                SetGhostToSelectedBuilding(b);
-                Debug.Log("Selected building: " + b);
                 if (b != null)
                 {
-                    foreach (Vector2Int v in b.GetOccupiedTiles(WorldGrid))
-                    {
-                        WorldGrid.RemoveBuilding(v.x, v.y);
-                    }
+                    //SetGhostToSelectedBuilding(b);
+                    SetSelectedObjectInScene(b.gameObject);
                 }
-
-
             }
         }
 
@@ -135,6 +147,17 @@ public class GridBuilder : MonoBehaviour
         if (col != null) col.isTrigger = true;
     }
 
+    public void SetGhostToSelectedObjectInScene()
+    {
+        if (selected_object_in_scene != null)
+        {
+            Building b = selected_object_in_scene.GetComponent<Building>();
+            if (b != null)
+            {
+                SetGhostToSelectedBuilding(b);
+            }
+        }
+    }
     private void SetGhostToSelectedBuilding(Building b)
     {
         switch (b.gameObject.name)
@@ -154,10 +177,131 @@ public class GridBuilder : MonoBehaviour
                 break;
         }
         this.rotation = b.GetDirection();
+        this.UpdateGhost();
     }
 
     public void SetGhostBuilding(int index)
     {
         if (index >= 0 && index < prefab_list.Count) selected_prefab = prefab_list[index];
+    }
+
+    public void SetSelectedObjectInScene(GameObject building_gameObject)
+    {
+        if (selected_object_in_scene == building_gameObject)
+        {
+            UnselectObjectInScene();
+            return;
+        }
+
+
+        //if (selected_object_in_scene != null)
+        //{
+        //    selected_object_in_scene.GetComponentInChildren<Renderer>().material = selected_object_in_scene_material;
+        //    if (picked_up_selected_object_in_scene)
+        //    {
+        //        DropSelectedObjectInScene();
+        //    }
+        //}
+        UnselectObjectInScene();
+        selected_object_in_scene = building_gameObject;
+        Renderer renderer = selected_object_in_scene.GetComponentInChildren<Renderer>();
+        selected_object_in_scene_material = renderer.material;
+        renderer.material = selected_material;
+    }
+
+    public void UnselectObjectInScene()
+    {
+        //if (selected_object_in_scene != null)
+        //{
+        //    Renderer r = selected_object_in_scene.GetComponentInChildren<Renderer>();
+        //    if (r != null)
+        //    {
+        //        r.material = selected_object_in_scene_material;
+        //        print("Changed material");
+        //    }
+        //    else
+        //    {
+        //        print("Null thuing>");
+        //    }
+        //    if (picked_up_selected_object_in_scene) DropSelectedObjectInScene();
+        //    selected_object_in_scene = null;
+        //    print("selected object is null?" + (selected_object_in_scene == null));
+        //}
+        if (selected_object_in_scene != null)
+        {
+            selected_object_in_scene.GetComponentInChildren<Renderer>().material = selected_object_in_scene_material;
+            if (picked_up_selected_object_in_scene)
+            {
+                DropSelectedObjectInScene();
+            }
+            selected_object_in_scene = null;
+        }
+    }
+    public void DestroyBuilding(Building b)
+    {
+        WorldGrid.RemoveBuildingFromAllTiles(b);
+        Destroy(b.gameObject);
+    }
+
+    public void DestroyBuilding(GameObject building_gameObject)
+    {
+        Building b = building_gameObject.GetComponent<Building>();
+        if (b == null) return;
+        DestroyBuilding(b);
+    }
+
+    public void DestroySelectedBuilding()
+    {
+        if (selected_object_in_scene != null)
+        {
+            DestroyBuilding(selected_object_in_scene);
+            selected_object_in_scene = null;
+        }
+    }
+
+    public void HideSelectedObjectInScene()
+    {
+        if (selected_object_in_scene != null)
+        {
+            //selected_object_in_scene.SetActive(false);
+            selected_object_in_scene.GetComponentInChildren<Renderer>().material = pickedup_material;
+        }
+    }
+
+    public void ShowSelectedObjectInScene()
+    {
+        if (selected_object_in_scene != null)
+        {
+            //selected_object_in_scene.SetActive(true);
+            selected_object_in_scene.GetComponentInChildren<Renderer>().material = selected_object_in_scene_material;
+        }
+    }
+    public void PickupSelectedObjectInScene()
+    {
+        if (selected_object_in_scene == null) return;
+        SetGhostToSelectedObjectInScene();
+        HideSelectedObjectInScene();
+        picked_up_selected_object_in_scene = true;
+    }
+
+    public void DropSelectedObjectInScene()
+    {
+        ShowSelectedObjectInScene();
+        picked_up_selected_object_in_scene = false;
+    }
+
+    public void RepositionSelectedObjectInScene(Vector2Int grid_position)
+    {
+        Building building_script = selected_object_in_scene.GetComponent<Building>();
+        List<Vector2Int> all_grid_positions = building_script.GetAllGridPositions(grid_position, rotation);
+        if (WorldGrid.CanBuild(all_grid_positions, building_script))
+        {
+            WorldGrid.RemoveBuildingFromAllTiles(building_script);
+            building_script.SetDirection(rotation);
+            WorldGrid.SetBuilding(grid_position.x, grid_position.y, selected_object_in_scene);
+            ShowSelectedObjectInScene();
+            picked_up_selected_object_in_scene = false;
+            Debug.Log("Repositioned building");
+        }
     }
 }

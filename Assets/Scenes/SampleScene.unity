@@ -401,7 +401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 78730531}
   m_Layer: 5
-  m_Name: Selected Shape UI
+  m_Name: Edit Shape UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -621,6 +621,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &160565265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 160565267}
+  - component: {fileID: 160565266}
+  m_Layer: 0
+  m_Name: Shape Edit Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &160565266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160565265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 259b6c524aa86b84fb08635e859f452d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gb: {fileID: 1259984076}
+--- !u!4 &160565267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160565265}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 896.8052, y: 538.30646, z: -623.4831}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &175481869
 GameObject:
   m_ObjectHideFlags: 0
@@ -2002,7 +2046,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 473208727}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 160565266}
+        m_TargetAssemblyTypeName: ShapeEditScript, Assembly-CSharp
+        m_MethodName: DestroySelectedObject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &473208727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2106,7 +2162,7 @@ GameObject:
   - component: {fileID: 539092144}
   - component: {fileID: 539092143}
   m_Layer: 5
-  m_Name: Move Button
+  m_Name: Pickup Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2175,7 +2231,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 539092144}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 160565266}
+        m_TargetAssemblyTypeName: ShapeEditScript, Assembly-CSharp
+        m_MethodName: PickupSelectedObject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &539092144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4680,7 +4748,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1259984075
 GameObject:
@@ -4720,6 +4788,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   ghost_material: {fileID: 2100000, guid: d45038af6415ead4d85f8e690c515a7f, type: 2}
+  selected_material: {fileID: 2100000, guid: fd20888d0c73e264696d28c70af3a372, type: 2}
+  pickedup_material: {fileID: 2100000, guid: aae95be2144c5d2438100cff6d1fa6d6, type: 2}
   rotation: 0
 --- !u!4 &1259984077
 Transform:
@@ -5122,7 +5192,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Move
+  m_text: Pickup
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

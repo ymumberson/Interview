@@ -31,8 +31,17 @@ public class GridObject : MonoBehaviour
     {
         return this.building != null;
     }
-
+    public bool ContainsBuilding(Building b)
+    {
+        return this.building != null && this.building == b;
+    }
     public void RemoveBuilding()
+    {
+        //this.DestroyBuilding();
+        this.building = null;
+    }
+
+    public void RemoveAndDestroyBuilding()
     {
         this.DestroyBuilding();
         this.building = null;
