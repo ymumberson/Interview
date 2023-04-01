@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridBuilder : MonoBehaviour
 {
     [SerializeField] GameObject cube_prefab;
+    [SerializeField] LayerMask detect_layer;
     public Grid WorldGrid { get; private set; }
     private void Awake()
     {
@@ -19,7 +20,7 @@ public class GridBuilder : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
-            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit);
+            Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
             if (hit.rigidbody != null)
             {
                 Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
