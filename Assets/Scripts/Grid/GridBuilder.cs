@@ -74,6 +74,7 @@ public class GridBuilder : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            print(hit.point + " -> " + click_position + " -> " + world_position);
             //RaycastHit hit;
             //Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
             if (hit.rigidbody != null)
@@ -83,7 +84,7 @@ public class GridBuilder : MonoBehaviour
                 //Vector3 world_position = WorldGrid.GetWorldPosition(click_position);
 
                 Building b = WorldGrid.GetBuilding(click_position.x, click_position.y);
-
+                SetGhostToSelectedBuilding(b);
                 if (b != null)
                 {
                     foreach (Vector2Int v in b.GetOccupiedTiles(WorldGrid))
@@ -91,6 +92,8 @@ public class GridBuilder : MonoBehaviour
                         WorldGrid.RemoveBuilding(v.x, v.y);
                     }
                 }
+
+
             }
         }
 
@@ -120,5 +123,35 @@ public class GridBuilder : MonoBehaviour
         {
             r.material = ghost_material;
         }
+
+        ghost.gameObject.layer = 10;
+        foreach (Transform child in ghost.transform)
+        {
+            child.gameObject.layer = 10;
+        }
+        
+        Collider col = ghost.gameObject.GetComponentInChildren <Collider>();
+        if (col != null) col.isTrigger = true;
+    }
+
+    private void SetGhostToSelectedBuilding(Building b)
+    {
+        switch (b.gameObject.name)
+        {
+            default:
+            case "Cube(Clone)":
+                selected_prefab = prefab_list[0];
+                break;
+            case "Sphere(Clone)":
+                selected_prefab = prefab_list[1];
+                break;
+            case "Big Cube(Clone)":
+                selected_prefab = prefab_list[2];
+                break;
+            case "Rectangle(Clone)":
+                selected_prefab = prefab_list[3];
+                break;
+        }
+        this.rotation = b.GetDirection();
     }
 }
