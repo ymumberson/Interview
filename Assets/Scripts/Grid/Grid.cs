@@ -78,7 +78,30 @@ public class Grid
     {
         if (InBounds(x, y))
         {
-            grid[x, y].SetBuilding(building);
+            Building building_script = building.GetComponent<Building>();
+
+            List<Vector2Int> all_positions = building_script.GetAllGridPositions(new Vector2Int(x, y));
+            foreach (Vector2Int position in all_positions)
+            {
+                grid[position.x, position.y].SetBuilding(building);
+            }
+            grid[x, y].PositionBuildingOnSelf(); /* Setting position changes the transform, so make sure the transform is set to (x,y) */
+
+
+            //if (building_script.GetHeight() == 1 && building_script.GetWidth() == 1)
+            //{
+            //    grid[x, y].SetBuilding(building);
+            //}
+            //else
+            //{
+            //    for (int i = building_script.GetWidth() - 1; i >= 0; --i)
+            //    {
+            //        for (int j = building_script.GetHeight() - 1; j >= 0; --j)
+            //        {
+            //            grid[x + i, y + j].SetBuilding(building);
+            //        }
+            //    }
+            //}
             return true;
         }
         else
@@ -110,4 +133,37 @@ public class Grid
     {
         return CanBuild(GetXY(world_position));
     }
+
+    public bool CanBuild(List<Vector2Int> all_grid_positions)
+    {
+        foreach (Vector2Int v in all_grid_positions)
+        {
+            if (!CanBuild(v))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //public bool CanBuild(Vector3 world_position, Building building)
+    //{
+    //    return CanBuild(GetXY(world_position), building);
+    //}
+
+    //public bool CanBuild(Vector2Int grid_position, Building building)
+    //{
+    //    return CanBuild(grid_position.x, grid_position.y, building);
+    //}
+    //public bool CanBuild(int x, int y, Building building)
+    //{
+    //    for (int i = 0; i < building.GetWidth(); ++i)
+    //    {
+    //        for (int j = 0; j < building.GetHeight(); ++j)
+    //        {
+    //            if (!CanBuild(x+i,y+j)) return false;
+    //        }
+    //    }
+    //    return true;
+    //}
 }

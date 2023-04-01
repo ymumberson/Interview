@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 2563332537732549458}
   - component: {fileID: 8802983842546819578}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Big Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,7 +121,7 @@ Transform:
   m_GameObject: {fileID: 8601163094927427213}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 6586119687637380499}
   m_Father: {fileID: 0}
@@ -139,5 +139,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af3c23be26703247a4e858092c33c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 1
-  height: 1
+  width: 2
+  height: 2
