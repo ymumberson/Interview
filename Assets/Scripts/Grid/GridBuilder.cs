@@ -26,10 +26,25 @@ public class GridBuilder : MonoBehaviour
                 Debug.Log("Clicked at coordinate: " + hit.point + " == " + WorldGrid.GetXY(hit.point));
                 Vector2 click_position = WorldGrid.GetXY(hit.point);
                 Vector3 world_position = WorldGrid.GetWorldPosition(click_position);
-                GameObject building = Instantiate(cube_prefab, Vector3.zero, Quaternion.identity);
-                if (!WorldGrid.SetBuilding(world_position, building)) {
-                    Destroy(building);
+
+                /* Check if we can build at a certain place */
+                if (WorldGrid.CanBuild(world_position))
+                {
+                    GameObject building = Instantiate(cube_prefab, Vector3.zero, Quaternion.identity);
+                    WorldGrid.SetBuilding(world_position, building);
                 }
+                else
+                {
+                    Debug.Log("There is alread a building here!");
+                }
+
+                /* Replace building where we click */
+                //GameObject building = Instantiate(cube_prefab, Vector3.zero, Quaternion.identity);
+                //if (!WorldGrid.SetBuilding(world_position, building)) {
+                //    Destroy(building);
+                //}
+
+
             }
         }
     }
