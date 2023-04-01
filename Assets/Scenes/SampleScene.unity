@@ -320,13 +320,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 958740864}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 1e+9
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!1 &963194225
 GameObject:
@@ -462,6 +462,7 @@ MonoBehaviour:
   detect_layer:
     serializedVersion: 2
     m_Bits: 64
+  ghost_material: {fileID: 2100000, guid: d45038af6415ead4d85f8e690c515a7f, type: 2}
   rotation: 0
 --- !u!4 &1259984077
 Transform:
