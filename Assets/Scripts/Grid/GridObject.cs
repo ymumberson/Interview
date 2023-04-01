@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class GridObject : MonoBehaviour
 {
-    private GameObject building;
+    private Building building;
 
     public void SetBuilding(GameObject new_building)
     {
         if (new_building == building) return;
         if (DestroyBuilding()) Debug.Log("Replaced building");
-        building = new_building;
-        building.transform.position = this.transform.position;
+        building = new_building.GetComponent<Building>();
+        PositionBuildingOnSelf();
     }
 
     public void SetBuildingPosition(Vector3 world_position)
     {
-        if (building != null) building.transform.position = world_position;
+        if (building != null) building.SetPosition(this.transform.position);
     }
 
     public void PositionBuildingOnSelf()
     {
-        if (building != null) building.transform.position = this.transform.position;
+        if (building != null) building.SetPosition(this.transform.position);
     }
-    public GameObject GetBuilding()
+    public Building GetBuilding()
     {
         return building;
     }
