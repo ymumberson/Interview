@@ -20,17 +20,30 @@ public class GridBuilder : MonoBehaviour
     private GameObject selected_object_in_scene;
     private Material selected_object_in_scene_material;
     private bool picked_up_selected_object_in_scene;
+    private int selected_object_in_scene_grid_index;
 
     private int height;
     private int width;
     private float cell_size;
     public Grid WorldGrid { get; private set; }
+    private List<Grid> grid_list;
+    private int grid_index;
+    private int num_grids;
     private void Awake()
     {
         height = 10;
         width = 10;
         cell_size = 10f;
-        WorldGrid = new Grid(new Vector3(0, 0, 0), height, width, cell_size);
+        //WorldGrid = new Grid(new Vector3(0, 0, 0), height, width, cell_size);
+        num_grids = 4;
+        grid_list = new List<Grid>();
+        for (int i=0; i<num_grids; ++i)
+        {
+            grid_list.Add(new Grid(new Vector3(0, i*cell_size, 0), height, width, cell_size));
+        }
+        WorldGrid = grid_list[0];
+        grid_index = 0;
+
         selected_prefab = prefab_list[0];
         selected_object_in_scene = null;
         selected_object_in_scene_material = null;
@@ -121,6 +134,33 @@ public class GridBuilder : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) selected_prefab = prefab_list[2]; UpdateGhost();
         if (Input.GetKeyDown(KeyCode.Alpha4)) selected_prefab = prefab_list[3]; UpdateGhost();
 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            if (grid_index < num_grids-1)
+            {
+                ++grid_index;
+                WorldGrid = grid_list[grid_index];
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            if (grid_index > 0)
+            {
+                --grid_index;
+                WorldGrid = grid_list[grid_index];
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            if (hit.rigidbody != null && !EventSystem.current.IsPointerOverGameObject())
+            {
+                Building b = WorldGrid.GetBuilding(click_position.x, click_position.y);
+                if (b != null) DestroyBuilding(b);
+            }
+        }
+
         ghost.SetPosition(world_position);
     }
 
@@ -207,6 +247,7 @@ public class GridBuilder : MonoBehaviour
         Renderer renderer = selected_object_in_scene.GetComponentInChildren<Renderer>();
         selected_object_in_scene_material = renderer.material;
         renderer.material = selected_material;
+        selected_object_in_scene_grid_index = grid_index;
     }
 
     public void UnselectObjectInScene()
@@ -240,6 +281,7 @@ public class GridBuilder : MonoBehaviour
     public void DestroyBuilding(Building b)
     {
         WorldGrid.RemoveBuildingFromAllTiles(b);
+        if (selected_object_in_scene == b.gameObject) selected_object_in_scene = null;
         Destroy(b.gameObject);
     }
 
@@ -290,13 +332,28 @@ public class GridBuilder : MonoBehaviour
         picked_up_selected_object_in_scene = false;
     }
 
+    //public void RepositionSelectedObjectInScene(Vector2Int grid_position)
+    //{
+    //    Building building_script = selected_object_in_scene.GetComponent<Building>();
+    //    List<Vector2Int> all_grid_positions = building_script.GetAllGridPositions(grid_position, rotation);
+    //    if (WorldGrid.CanBuild(all_grid_positions, building_script))
+    //    {
+    //        WorldGrid.RemoveBuildingFromAllTiles(building_script);
+    //        building_script.SetDirection(rotation);
+    //        WorldGrid.SetBuilding(grid_position.x, grid_position.y, selected_object_in_scene);
+    //        ShowSelectedObjectInScene();
+    //        picked_up_selected_object_in_scene = false;
+    //        Debug.Log("Repositioned building");
+    //    }
+    //}
+
     public void RepositionSelectedObjectInScene(Vector2Int grid_position)
     {
         Building building_script = selected_object_in_scene.GetComponent<Building>();
         List<Vector2Int> all_grid_positions = building_script.GetAllGridPositions(grid_position, rotation);
         if (WorldGrid.CanBuild(all_grid_positions, building_script))
         {
-            WorldGrid.RemoveBuildingFromAllTiles(building_script);
+            grid_list[selected_object_in_scene_grid_index].RemoveBuildingFromAllTiles(building_script);
             building_script.SetDirection(rotation);
             WorldGrid.SetBuilding(grid_position.x, grid_position.y, selected_object_in_scene);
             ShowSelectedObjectInScene();
