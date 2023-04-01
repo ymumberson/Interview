@@ -142,7 +142,7 @@ public class Building : MonoBehaviour
         {
             case Direction.DOWN:
             case Direction.UP:
-                Debug.Log("Up/Down");
+                //Debug.Log("Up/Down");
                 for (int i = 0; i < width; ++i)
                 {
                     for (int j = 0; j < height; ++j)
@@ -153,7 +153,7 @@ public class Building : MonoBehaviour
                 break;
             case Direction.LEFT:
             case Direction.RIGHT:
-                Debug.Log("Right/Left");
+                //Debug.Log("Right/Left");
                 for (int i = 0; i < height; ++i)
                 {
                     for (int j = 0; j < width; ++j)
@@ -163,7 +163,7 @@ public class Building : MonoBehaviour
                 }
                 break;
             default: // == UP
-                Debug.Log("Default");
+                //Debug.Log("Default");
                 for (int i = 0; i < width; ++i)
                 {
                     for (int j = 0; j < height; ++j)
