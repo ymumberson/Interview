@@ -19,6 +19,7 @@ public class GridBuilder : MonoBehaviour
     private Building ghost;
 
     public UnityEvent changed_selected_object_in_scene;
+    public UnityEvent changed_build_level;
 
     private GameObject selected_object_in_scene;
     private Material selected_object_in_scene_material;
@@ -146,25 +147,27 @@ public class GridBuilder : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) selected_prefab = prefab_list[2]; UpdateGhost();
         if (Input.GetKeyDown(KeyCode.Alpha4)) selected_prefab = prefab_list[3]; UpdateGhost();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0)
         {
-            if (grid_index < num_grids-1)
+            if (grid_index < num_grids - 1)
             {
                 ++grid_index;
                 WorldGrid = grid_list[grid_index];
+                changed_build_level.Invoke();
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetAxisRaw("Mouse ScrollWheel") < 0)
         {
             if (grid_index > 0)
             {
                 --grid_index;
                 WorldGrid = grid_list[grid_index];
+                changed_build_level.Invoke();
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.Mouse2))
         {
             if (hit.rigidbody != null && !EventSystem.current.IsPointerOverGameObject())
             {
@@ -407,5 +410,10 @@ public class GridBuilder : MonoBehaviour
         if (selected_object_in_scene != null) return selected_object_in_scene_material.color;
         //return Color.black;
         return new_object_color;
+    }
+
+    public int GetCurrentBuildLevel()
+    {
+        return grid_index + 1;
     }
 }

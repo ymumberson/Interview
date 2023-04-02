@@ -22,8 +22,10 @@ public class CinemaCameraScript : MonoBehaviour
 
         if (horizontal != 0) raw_move_direction.x = horizontal;
         if (vertical != 0) raw_move_direction.z = vertical;
+        if (Input.GetKey(KeyCode.LeftControl)) raw_move_direction.y = -1f;
+        if (Input.GetKey(KeyCode.LeftShift)) raw_move_direction.y = 1f;
 
-        Vector3 move_direction = transform.forward * raw_move_direction.z + transform.right * raw_move_direction.x;
+        Vector3 move_direction = transform.forward * raw_move_direction.z + transform.right * raw_move_direction.x + transform.up * raw_move_direction.y;
         transform.position += move_speed * move_direction * Time.deltaTime;
 
         float rotate_amount = 0f;
