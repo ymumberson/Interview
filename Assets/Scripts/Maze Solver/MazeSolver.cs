@@ -41,6 +41,20 @@ public class MazeSolver : MonoBehaviour
         grid_builder.WorldGrid.SetBuilding(width-1, height-1, end_cube);
     }
 
+    public void ResetCube()
+    {
+        if (!is_moving_along_path)
+        {
+            start_cube.GetComponent<Building>().SetPosition(Vector3.zero);
+        }
+        else
+        {
+            start_cube.GetComponent<Building>().SetPosition(Vector3.zero);
+            is_moving_along_path = false;
+            path = null;
+        }
+    }
+
     private void FixedUpdate()
     {
         timer += Time.fixedDeltaTime;

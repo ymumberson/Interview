@@ -10,6 +10,11 @@ public class MainMenuScript : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
     }
 
+    public void LoadMazeSolverScene()
+    {
+        SceneManager.LoadScene("MazeScene");
+    }
+
     public void QuitGame()
     {
         Application.Quit();
