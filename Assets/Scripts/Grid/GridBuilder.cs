@@ -35,11 +35,18 @@ public class GridBuilder : MonoBehaviour
     private int num_grids;
     private void Awake()
     {
-        height = 20;
-        width = 20;
+        //num_grids = 4;
+        //height = 20;
+        //width = 20;
+
+        num_grids = PlayerPrefs.GetInt("layers");
+        height = PlayerPrefs.GetInt("height");
+        width = PlayerPrefs.GetInt("width");
+
+
         cell_size = 10f;
         //WorldGrid = new Grid(new Vector3(0, 0, 0), height, width, cell_size);
-        num_grids = 4;
+       
         grid_list = new List<Grid>();
         for (int i=0; i<num_grids; ++i)
         {
