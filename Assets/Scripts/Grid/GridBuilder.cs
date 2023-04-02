@@ -63,6 +63,8 @@ public class GridBuilder : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenuScript.Is_Paused) return;
+        
         RaycastHit hit;
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
         Vector2Int click_position = Vector2Int.zero;
