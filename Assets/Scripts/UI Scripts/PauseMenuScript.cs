@@ -46,16 +46,6 @@ public class PauseMenuScript : MonoBehaviour
         Is_Paused = true;
     }
 
-    public void ShowSettingsMenu()
-    {
-
-    }
-
-    public void HideSettingsMenu()
-    {
-
-    }
-
     public void Quit()
     {
         Time.timeScale = 1f;

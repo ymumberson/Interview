@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the object that the CinemaCamera follows.
+/// </summary>
 public class CinemaCameraScript : MonoBehaviour
 {
     private float move_speed;
@@ -15,6 +18,10 @@ public class CinemaCameraScript : MonoBehaviour
 
     private void Update()
     {
+        /**
+         *  Controls the Inputs and moves the object accordingly.
+         **/
+
         Vector3 raw_move_direction = new Vector3(0,0,0);
 
         float horizontal = Input.GetAxisRaw("Horizontal");
