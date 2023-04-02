@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
 
     public Sound[] sounds;
+    private float sound_fx_volume;
 
     private void Awake()
     {
@@ -30,6 +31,9 @@ public class AudioManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
         }
+
+        this.SetSoundFxVolume(0.5f);
+        this.SetMusicVolume(0.5f);
     }
 
     private void Start()
@@ -99,5 +103,23 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Sound: " + sound_name + " does not exist!");
         }
         return 0f;
+    }
+
+    public void SetSoundFxVolume(float volume)
+    {
+        foreach (Sound s in sounds)
+        {
+            if (s.name != "Music")
+            {
+                s.volume = volume;
+                s.source.volume = volume;
+            }
+        }
+        this.sound_fx_volume = volume;
+    }
+
+    public float GetSoundFxVolume()
+    {
+        return this.sound_fx_volume;
     }
 }

@@ -50,3 +50,15 @@ MonoBehaviour:
     pitch: 1
     source: {fileID: 0}
     loop: 1
+  - name: Break
+    clip: {fileID: 8300000, guid: d86eeccf61944864bb88322b67c9ba53, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+  - name: Place
+    clip: {fileID: 8300000, guid: 1cdfe275c5f0fc142a145307cfd6150d, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0

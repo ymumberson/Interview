@@ -103,6 +103,7 @@ public class GridBuilder : MonoBehaviour
                     if (WorldGrid.CanBuild(all_grid_positions))
                     {
                         WorldGrid.SetBuilding(world_position, building);
+                        AudioManager.Instance.PlaySound("Place");
                     }
                     else
                     {
@@ -297,6 +298,7 @@ public class GridBuilder : MonoBehaviour
         WorldGrid.RemoveBuildingFromAllTiles(b);
         if (selected_object_in_scene == b.gameObject) selected_object_in_scene = null;
         Destroy(b.gameObject);
+        AudioManager.Instance.PlaySound("Break");
     }
 
     public void DestroyBuilding(GameObject building_gameObject)
@@ -304,6 +306,7 @@ public class GridBuilder : MonoBehaviour
         Building b = building_gameObject.GetComponent<Building>();
         if (b == null) return;
         DestroyBuilding(b);
+        AudioManager.Instance.PlaySound("Break");
     }
 
     public void DestroySelectedBuilding()
@@ -312,6 +315,7 @@ public class GridBuilder : MonoBehaviour
         {
             DestroyBuilding(selected_object_in_scene);
             selected_object_in_scene = null;
+            AudioManager.Instance.PlaySound("Break");
         }
     }
 
@@ -344,6 +348,7 @@ public class GridBuilder : MonoBehaviour
     {
         ShowSelectedObjectInScene();
         picked_up_selected_object_in_scene = false;
+        AudioManager.Instance.PlaySound("Place");
     }
 
     //public void RepositionSelectedObjectInScene(Vector2Int grid_position)
@@ -373,6 +378,7 @@ public class GridBuilder : MonoBehaviour
             ShowSelectedObjectInScene();
             picked_up_selected_object_in_scene = false;
             Debug.Log("Repositioned building");
+            AudioManager.Instance.PlaySound("Place");
         }
     }
 
