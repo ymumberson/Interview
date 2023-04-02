@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 public class GridBuilder : MonoBehaviour
 {
@@ -17,10 +18,14 @@ public class GridBuilder : MonoBehaviour
     private GameObject selected_prefab;
     private Building ghost;
 
+    public UnityEvent changed_selected_object_in_scene;
+
     private GameObject selected_object_in_scene;
     private Material selected_object_in_scene_material;
     private bool picked_up_selected_object_in_scene;
     private int selected_object_in_scene_grid_index;
+
+    private Color new_object_color;
 
     private int height;
     private int width;
@@ -43,6 +48,8 @@ public class GridBuilder : MonoBehaviour
         }
         WorldGrid = grid_list[0];
         grid_index = 0;
+
+        new_object_color = Color.white;
 
         selected_prefab = prefab_list[0];
         selected_object_in_scene = null;
@@ -87,6 +94,8 @@ public class GridBuilder : MonoBehaviour
                     Building building_script = building.GetComponent<Building>();
                     building_script.SetDirection(rotation);
                     building_script.SetCellSize(cell_size);
+
+                    building.GetComponentInChildren<Renderer>().material.color = new_object_color;
 
                     List<Vector2Int> all_grid_positions = building_script.GetAllGridPositions(click_position);
                     if (WorldGrid.CanBuild(all_grid_positions))
@@ -248,6 +257,8 @@ public class GridBuilder : MonoBehaviour
         selected_object_in_scene_material = renderer.material;
         renderer.material = selected_material;
         selected_object_in_scene_grid_index = grid_index;
+
+        changed_selected_object_in_scene.Invoke();
     }
 
     public void UnselectObjectInScene()
@@ -276,6 +287,7 @@ public class GridBuilder : MonoBehaviour
                 DropSelectedObjectInScene();
             }
             selected_object_in_scene = null;
+            changed_selected_object_in_scene.Invoke();
         }
     }
     public void DestroyBuilding(Building b)
@@ -360,5 +372,32 @@ public class GridBuilder : MonoBehaviour
             picked_up_selected_object_in_scene = false;
             Debug.Log("Repositioned building");
         }
+    }
+
+    public void TestChangeColour()
+    {
+        ChangeColourSeletedObject(Color.red);
+    }
+
+    public void ChangeColourSeletedObject(Color c)
+    {
+        /* Design question is if I want the color to overwrite the "selected" colour, so instead I deselect it -> Same effect-ish */
+        if (selected_object_in_scene != null)
+        {
+            //selected_object_in_scene.GetComponentInChildren<Renderer>().material.color = c; // Would overwrite the selected color
+            selected_object_in_scene_material.color = c;
+            UnselectObjectInScene();
+        }
+        else
+        {
+            new_object_color = c;
+        }
+    }
+
+    public Color GetColorSelectedObject()
+    {
+        if (selected_object_in_scene != null) return selected_object_in_scene_material.color;
+        //return Color.black;
+        return new_object_color;
     }
 }
