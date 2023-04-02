@@ -6,9 +6,7 @@ using UnityEngine.Events;
 
 public class GridBuilder : MonoBehaviour
 {
-    //[SerializeField] GameObject cube_prefab;
-    //[SerializeField] GameObject sphere_prefab;
-    //[SerializeField] GameObject big_cube_prefab;
+    [SerializeField] GameObject floor;
     [SerializeField] List<GameObject> prefab_list;
     [SerializeField] LayerMask detect_layer;
     [SerializeField] Material ghost_material;
@@ -37,8 +35,8 @@ public class GridBuilder : MonoBehaviour
     private int num_grids;
     private void Awake()
     {
-        height = 10;
-        width = 10;
+        height = 20;
+        width = 20;
         cell_size = 10f;
         //WorldGrid = new Grid(new Vector3(0, 0, 0), height, width, cell_size);
         num_grids = 4;
@@ -49,6 +47,9 @@ public class GridBuilder : MonoBehaviour
         }
         WorldGrid = grid_list[0];
         grid_index = 0;
+
+        floor.transform.localScale = new Vector3(width*cell_size, 1, height * cell_size);
+        floor.transform.position = new Vector3((width * cell_size)/2f, 0, (height * cell_size)/2f);
 
         new_object_color = Color.white;
 
@@ -77,7 +78,7 @@ public class GridBuilder : MonoBehaviour
             world_position = WorldGrid.GetWorldPosition(click_position);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             //RaycastHit hit;
             //Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000f, detect_layer);
@@ -167,7 +168,7 @@ public class GridBuilder : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.Mouse2))
+        if (Input.GetKey(KeyCode.Backspace) || Input.GetKey(KeyCode.Mouse2))
         {
             if (hit.rigidbody != null && !EventSystem.current.IsPointerOverGameObject())
             {
