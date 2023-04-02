@@ -35,6 +35,21 @@ public class Grid
         Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
     }
 
+    public int GetWidth()
+    {
+        return this.width;
+    }
+
+    public int GetHeight()
+    {
+        return this.height;
+    }
+
+    public float GetCellSize()
+    {
+        return this.cell_size;
+    }
+
     public Vector3 GetWorldPosition(int x, int y)
     {
         //return new Vector3(y, x) * cell_size;
