@@ -18,7 +18,7 @@ public class Grid
         this.width = width;
         this.height = height;
         this.cell_size = cell_size;
-        this.grid = new GridObject[height,width];
+        this.grid = new GridObject[width,height];
         this.origin = origin;
         for (int j=0; j<height; ++j)
         {

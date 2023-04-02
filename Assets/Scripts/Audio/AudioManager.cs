@@ -33,7 +33,7 @@ public class AudioManager : MonoBehaviour
         }
 
         this.SetSoundFxVolume(0.5f);
-        this.SetMusicVolume(0.5f);
+        this.SetMusicVolume(0.35f);
     }
 
     private void Start()

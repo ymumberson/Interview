@@ -45,12 +45,12 @@ public class GridBuilder : MonoBehaviour
 
 
         cell_size = 10f;
-        //WorldGrid = new Grid(new Vector3(0, 0, 0), height, width, cell_size);
+        //WorldGrid = new Grid(new Vector3(0, 0, 0), width, height, cell_size);
        
         grid_list = new List<Grid>();
         for (int i=0; i<num_grids; ++i)
         {
-            grid_list.Add(new Grid(new Vector3(0, i*cell_size, 0), height, width, cell_size));
+            grid_list.Add(new Grid(new Vector3(0, i*cell_size, 0), width, height, cell_size));
         }
         WorldGrid = grid_list[0];
         grid_index = 0;
